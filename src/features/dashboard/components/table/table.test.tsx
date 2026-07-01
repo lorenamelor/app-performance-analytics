@@ -10,6 +10,7 @@ const mockData: AppData[] = [
     data: [
       ["2023-01-01", 100, 200],
       ["2023-01-02", 200, 300],
+      ["2023-01-10", 999, 999],
     ],
   },
   {
@@ -29,11 +30,22 @@ const defaultDateProps = {
 };
 
 describe("Table", () => {
-  it("renders a table", () => {
+  it("renders column headers", () => {
     render(<Table data={mockData} {...defaultDateProps} />);
 
     expect(screen.getByText("App Name")).toBeInTheDocument();
     expect(screen.getByText("Downloads")).toBeInTheDocument();
+    expect(screen.getByText("Revenue")).toBeInTheDocument();
+    expect(screen.getByText("RPD")).toBeInTheDocument();
+  });
+
+  it("aggregates metrics within the date range", () => {
+    render(<Table data={mockData} {...defaultDateProps} />);
+
+    expect(screen.getByText("300")).toBeInTheDocument();
+    expect(screen.getByText("400")).toBeInTheDocument();
+    expect(screen.getByText("$5.00")).toBeInTheDocument();
+    expect(screen.getByText("$6.00")).toBeInTheDocument();
   });
 
   it("does not render a table if data is empty", () => {

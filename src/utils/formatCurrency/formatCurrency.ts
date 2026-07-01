@@ -12,11 +12,3 @@ export function formatCurrency(value: number): string {
 export function formatCurrencyFromCents(cents: number): string {
   return currencyFormatter.format(cents / 100);
 }
-
-export function formatRpd(rpd: number | null): string {
-  if (rpd === null) {
-    return "-";
-  }
-
-  return formatCurrency(rpd);
-}
