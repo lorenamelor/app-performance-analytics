@@ -30,9 +30,10 @@ const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
       return {
         name: series.name,
         type: "line",
-        data: series.data.map(([date, value]) => {
-          const dateMs = dayjsUtc(date).valueOf(); // convert date string to unix milliseconds
-          const yValue = value as number;
+        data: series.data.map(([date, downloads, revenueCents]) => {
+          const dateMs = dayjsUtc(date).valueOf();
+          const yValue =
+            measure === "downloads" ? downloads : revenueCents / 100;
           return {
             x: dateMs,
             y: yValue,
@@ -41,7 +42,7 @@ const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
       };
     });
     setSeriesData(newSeriesData);
-  }, [data]);
+  }, [data, measure]);
 
   if (!seriesData.length) {
     return null;
