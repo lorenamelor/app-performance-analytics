@@ -3,6 +3,7 @@ import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import type { AppData, Measure } from "../../../../types";
 import { dayjsUtc } from "../../../../config/dayjs";
+import { filterByDateRange } from "../../utils/filterData/filterData";
 
 type ChartProps = {
   data: AppData[];
@@ -17,9 +18,6 @@ const CHART_TITLE: Record<Measure, string> = {
 };
 
 const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
-  void startDate;
-  void endDate;
-
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const [seriesData, setSeriesData] = useState<Highcharts.SeriesOptionsType[]>(
     [],
@@ -27,11 +25,13 @@ const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
 
   useEffect(() => {
     const newSeriesData: Highcharts.SeriesOptionsType[] = data.map((series) => {
+      const filteredData = filterByDateRange(series.data, startDate, endDate);
+
       return {
         name: series.name,
         type: "line",
-        data: series.data.map(([date, downloads, revenueCents]) => {
-          const dateMs = dayjsUtc(date).valueOf();
+        data: filteredData.map(([date, downloads, revenueCents]) => {
+          const dateMs = dayjsUtc(date).valueOf(); // convert date string to unix milliseconds
           const yValue =
             measure === "downloads" ? downloads : revenueCents / 100;
           return {
@@ -42,7 +42,7 @@ const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
       };
     });
     setSeriesData(newSeriesData);
-  }, [data, measure]);
+  }, [data, measure, startDate, endDate]);
 
   if (!seriesData.length) {
     return null;
