@@ -1,19 +1,20 @@
 import Chart from "../components/chart/chart";
 import Table from "../components/table/table";
 import useData from "../hooks/useData";
-import "./App.css";
+import { getDefaultEndDate, getDefaultStartDate } from "./defaults";
+import "./app.css";
 
 const App = () => {
-  const data = useData();
+  const { data } = useData();
 
   return (
     <div className="container">
       <div>
         <p>
-          Start Date: <input value="2020-01-01" />
+          Start Date: <input value={getDefaultStartDate()} />
         </p>
         <p>
-          End Date: <input value="2020-01-07" />
+          End Date: <input value={getDefaultEndDate()} />
         </p>
       </div>
       <Chart data={data} />
