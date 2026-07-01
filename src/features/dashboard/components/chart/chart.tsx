@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import type { AppData, Measure } from "../../../../types";
@@ -25,12 +25,8 @@ const CHART_Y_AXIS_TITLE: Record<Measure, string> = {
 
 const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
-  const [seriesData, setSeriesData] = useState<Highcharts.SeriesOptionsType[]>(
-    [],
-  );
-
-  useEffect(() => {
-    const newSeriesData: Highcharts.SeriesOptionsType[] = data.map((series) => {
+  const seriesData = useMemo<Highcharts.SeriesOptionsType[]>(() => {
+    return data.map((series) => {
       const filteredData = filterByDateRange(series.data, startDate, endDate);
 
       return {
@@ -47,7 +43,6 @@ const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
         }),
       };
     });
-    setSeriesData(newSeriesData);
   }, [data, measure, startDate, endDate]);
 
   if (!seriesData.length) {

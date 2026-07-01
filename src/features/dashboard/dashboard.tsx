@@ -4,17 +4,12 @@ import Chart from "./components/chart/chart";
 import Table from "./components/table/table";
 import useData from "../../hooks/useData";
 import type { Measure } from "../../types";
-import {
-  DEFAULT_MEASURE,
-  getDefaultEndDate,
-  getDefaultStartDate,
-} from "./defaults";
 
 const Dashboard = () => {
   const { data } = useData();
-  const [measure, setMeasure] = useState<Measure>(DEFAULT_MEASURE);
-  const [startDate, setStartDate] = useState(getDefaultStartDate);
-  const [endDate, setEndDate] = useState(getDefaultEndDate);
+  const [measure, setMeasure] = useState<Measure>("downloads");
+  const [startDate, setStartDate] = useState("2020-01-01");
+  const [endDate, setEndDate] = useState("2020-01-07");
 
   return (
     <>
