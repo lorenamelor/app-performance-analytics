@@ -11,8 +11,12 @@ type ChartProps = {
   endDate: string;
 };
 
+const CHART_TITLE: Record<Measure, string> = {
+  downloads: "Downloads by App",
+  revenue: "Revenue by App",
+};
+
 const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
-  void measure;
   void startDate;
   void endDate;
 
@@ -45,7 +49,7 @@ const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
 
   const options: Highcharts.Options = {
     title: {
-      text: "Downloads by App",
+      text: CHART_TITLE[measure],
     },
     subtitle: {
       text: "TODO",
