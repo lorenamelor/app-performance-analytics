@@ -41,6 +41,22 @@ describe("Chart", () => {
     expect(screen.getByText("Jan 01, 2023 - Jan 02, 2023")).toBeInTheDocument();
   });
 
+  it("renders revenue y-axis label when measure is revenue", () => {
+    render(
+      <Chart
+        data={mockData}
+        {...defaultFilterProps}
+        measure="revenue"
+      />,
+    );
+    expect(screen.getByText("Revenue ($)")).toBeInTheDocument();
+  });
+
+  it("formats x-axis dates", () => {
+    render(<Chart data={mockData} {...defaultFilterProps} />);
+    expect(screen.getByText("Jan 01, 23'")).toBeInTheDocument();
+  });
+
   it("does not render a chart if data is empty", () => {
     render(<Chart data={[]} {...defaultFilterProps} />);
     expect(screen.queryByText("Downloads")).not.toBeInTheDocument();

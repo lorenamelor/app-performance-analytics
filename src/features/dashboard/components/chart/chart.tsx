@@ -4,7 +4,7 @@ import HighchartsReact from "highcharts-react-official";
 import type { AppData, Measure } from "../../../../types";
 import { dayjsUtc } from "../../../../config/dayjs";
 import { filterByDateRange } from "../../utils/filterData/filterData";
-import { formatDateRange } from "../../../../utils/formatDate/formatDate";
+import { formatDateRange, formatChartAxisDate } from "../../../../utils/formatDate/formatDate";
 
 type ChartProps = {
   data: AppData[];
@@ -16,6 +16,11 @@ type ChartProps = {
 const CHART_TITLE: Record<Measure, string> = {
   downloads: "Downloads by App",
   revenue: "Revenue by App",
+};
+
+const CHART_Y_AXIS_TITLE: Record<Measure, string> = {
+  downloads: "Downloads",
+  revenue: "Revenue ($)",
 };
 
 const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
@@ -58,11 +63,16 @@ const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
     },
     yAxis: {
       title: {
-        text: "Downloads",
+        text: CHART_Y_AXIS_TITLE[measure],
       },
     },
     xAxis: {
       type: "datetime",
+      labels: {
+        formatter: function () {
+          return formatChartAxisDate(this.value as number);
+        },
+      },
     },
     legend: {
       layout: "vertical",
