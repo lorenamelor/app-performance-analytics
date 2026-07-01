@@ -1,27 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Response } from "../types";
-
-const domain = "http://localhost:3000";
 
 const useData = () => {
   const [data, setData] = useState<Response>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const fetchData = async () => {
-    try {
-      // Simulate delay with setTimeout
-      setTimeout(async () => {
-        const response = await fetch(`${domain}/data.json`);
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      try {
+        const response = await fetch("/data.json");
         const jsonData = await response.json();
         setData(jsonData);
-      }, 2000);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 2000);
 
-  fetchData();
+    return () => clearTimeout(timer);
+  }, []);
 
-  return data;
+  return { data, isLoading };
 };
 
 export default useData;
