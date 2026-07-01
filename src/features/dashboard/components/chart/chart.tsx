@@ -1,13 +1,16 @@
 import { useMemo, useRef } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import type { AppData, Measure } from "../../../../types";
 import { dayjsUtc } from "../../../../config/dayjs";
 import { filterByDateRange } from "../../utils/filterData/filterData";
 import { formatDateRange, formatChartAxisDate } from "../../../../utils/formatDate/formatDate";
+import "./chart.css";
 
 type ChartProps = {
   data: AppData[];
+  isLoading: boolean;
   measure: Measure;
   startDate: string;
   endDate: string;
@@ -23,7 +26,7 @@ const CHART_Y_AXIS_TITLE: Record<Measure, string> = {
   revenue: "Revenue ($)",
 };
 
-const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
+const Chart = ({ data, isLoading, measure, startDate, endDate }: ChartProps) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const seriesData = useMemo<Highcharts.SeriesOptionsType[]>(() => {
     return data.map((series) => {
@@ -44,6 +47,14 @@ const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
       };
     });
   }, [data, measure, startDate, endDate]);
+
+  if (isLoading) {
+    return (
+      <div className="chart chart--loading" role="status" aria-label="Loading chart">
+        <CircularProgress />
+      </div>
+    );
+  }
 
   if (!seriesData.length) {
     return null;

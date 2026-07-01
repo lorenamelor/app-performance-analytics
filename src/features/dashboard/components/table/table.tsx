@@ -12,6 +12,7 @@ import "./table.css";
 
 type TableProps = {
   data: AppData[];
+  isLoading: boolean;
   startDate: string;
   endDate: string;
 };
@@ -24,7 +25,7 @@ type AppRow = {
   rpd: number | null;
 };
 
-const Table = ({ data, startDate, endDate }: TableProps) => {
+const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
   const rows = useMemo<AppRow[]>(() => {
     return data.map((appData) => {
       const filteredData = filterByDateRange(appData.data, startDate, endDate);
@@ -66,13 +67,13 @@ const Table = ({ data, startDate, endDate }: TableProps) => {
     [],
   );
 
-  if (!data.length) {
+  if (!isLoading && !data.length) {
     return null;
   }
 
   return (
     <div className="table">
-      <DataGrid rows={rows} columns={columns} />
+      <DataGrid rows={rows} columns={columns} loading={isLoading} />
     </div>
   );
 };

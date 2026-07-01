@@ -24,6 +24,7 @@ const mockData: AppData[] = [
 ];
 
 const defaultFilterProps = {
+  isLoading: false,
   measure: "downloads" as const,
   startDate: "2023-01-01",
   endDate: "2023-01-02",
@@ -55,6 +56,13 @@ describe("Chart", () => {
   it("formats x-axis dates", () => {
     render(<Chart data={mockData} {...defaultFilterProps} />);
     expect(screen.getByText("Jan 01, 23'")).toBeInTheDocument();
+  });
+
+  it("shows a loading indicator while data is loading", () => {
+    render(<Chart data={[]} {...defaultFilterProps} isLoading />);
+
+    expect(screen.getByRole("progressbar")).toBeInTheDocument();
+    expect(screen.queryByText("Downloads by App")).not.toBeInTheDocument();
   });
 
   it("does not render a chart if data is empty", () => {

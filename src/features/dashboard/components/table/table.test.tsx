@@ -25,6 +25,7 @@ const mockData: AppData[] = [
 ];
 
 const defaultDateProps = {
+  isLoading: false,
   startDate: "2023-01-01",
   endDate: "2023-01-02",
 };
@@ -46,6 +47,12 @@ describe("Table", () => {
     expect(screen.getByText("400")).toBeInTheDocument();
     expect(screen.getByText("$5.00")).toBeInTheDocument();
     expect(screen.getByText("$6.00")).toBeInTheDocument();
+  });
+
+  it("shows a loading indicator while data is loading", () => {
+    render(<Table data={[]} {...defaultDateProps} isLoading />);
+
+    expect(screen.getByRole("progressbar")).toBeInTheDocument();
   });
 
   it("does not render a table if data is empty", () => {

@@ -6,7 +6,7 @@ import useData from "../../hooks/useData";
 import type { Measure } from "../../types";
 
 const Dashboard = () => {
-  const { data } = useData();
+  const { data, isLoading } = useData();
   const [measure, setMeasure] = useState<Measure>("downloads");
   const [startDate, setStartDate] = useState("2020-01-01");
   const [endDate, setEndDate] = useState("2020-01-07");
@@ -23,11 +23,17 @@ const Dashboard = () => {
       />
       <Chart
         data={data}
+        isLoading={isLoading}
         measure={measure}
         startDate={startDate}
         endDate={endDate}
       />
-      <Table data={data} startDate={startDate} endDate={endDate} />
+      <Table
+        data={data}
+        isLoading={isLoading}
+        startDate={startDate}
+        endDate={endDate}
+      />
     </>
   );
 };
