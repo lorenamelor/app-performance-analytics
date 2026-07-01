@@ -11,6 +11,4 @@ export type AppData = {
   data: AppDataTuple[];
 };
 
-export type Response = AppData[];
-
 export type Measure = "downloads" | "revenue";

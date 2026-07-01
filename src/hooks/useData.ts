@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import type { Response } from "../types";
+import type { AppData } from "../types";
 
 const useData = () => {
-  const [data, setData] = useState<Response>([]);
+  const [data, setData] = useState<AppData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
