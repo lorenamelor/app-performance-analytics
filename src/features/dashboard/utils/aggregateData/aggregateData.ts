@@ -1,4 +1,4 @@
-import type { AppDataTuple } from "../types";
+import type { AppDataTuple } from "../../../../types";
 
 export type AggregatedMetrics = {
   downloads: number;

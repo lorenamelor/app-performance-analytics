@@ -1,29 +1,34 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import type { Response } from "../../types";
+import type { AppData } from "../../../../types";
 
 type TableProps = {
-  data: Response;
+  data: AppData[];
+  startDate: string;
+  endDate: string;
 };
 
-type RowProps = {
+type AppRow = {
   id: number;
   appName: string;
   downloads: number;
 };
 
-const Table = ({ data }: TableProps) => {
+const Table = ({ data, startDate, endDate }: TableProps) => {
+  void startDate;
+  void endDate;
+
   if (!data.length) {
     return null;
   }
 
-  const columns: GridColDef<RowProps>[] = [
+  const columns: GridColDef<AppRow>[] = [
     { field: "appName", headerName: "App Name", width: 150 },
     { field: "downloads", headerName: "Downloads", width: 150 },
   ];
 
   const rows = data.map((appData) => {
     const totalDownloads = 42;
-    const row: RowProps = {
+    const row: AppRow = {
       id: appData.id,
       appName: appData.name,
       downloads: totalDownloads,

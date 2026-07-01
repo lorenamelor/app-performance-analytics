@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import Chart from "./chart";
-import type { Response } from "../../types";
+import type { AppData } from "../../../../types";
 
-const mockData: Response = [
+const mockData: AppData[] = [
   {
     id: 1,
     name: "App 1",
@@ -23,20 +23,26 @@ const mockData: Response = [
   },
 ];
 
+const defaultFilterProps = {
+  measure: "downloads" as const,
+  startDate: "2023-01-01",
+  endDate: "2023-01-02",
+};
+
 describe("Chart", () => {
   it("renders a chart", () => {
-    render(<Chart data={mockData} />);
+    render(<Chart data={mockData} {...defaultFilterProps} />);
     expect(screen.getByText("Downloads")).toBeInTheDocument();
   });
 
   it("renders the title and subtitle", () => {
-    render(<Chart data={mockData} />);
+    render(<Chart data={mockData} {...defaultFilterProps} />);
     expect(screen.getByText("Downloads by App")).toBeInTheDocument();
     expect(screen.getByText("TODO")).toBeInTheDocument();
   });
 
   it("does not render a chart if data is empty", () => {
-    render(<Chart data={[]} />);
+    render(<Chart data={[]} {...defaultFilterProps} />);
     expect(screen.queryByText("Downloads")).not.toBeInTheDocument();
   });
 });

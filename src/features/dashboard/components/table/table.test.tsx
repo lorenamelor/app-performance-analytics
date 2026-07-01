@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import Table from "./table";
-import type { Response } from "../../types";
+import type { AppData } from "../../../../types";
 
-const mockData: Response = [
+const mockData: AppData[] = [
   {
     id: 1,
     name: "App 1",
@@ -23,16 +23,21 @@ const mockData: Response = [
   },
 ];
 
+const defaultDateProps = {
+  startDate: "2023-01-01",
+  endDate: "2023-01-02",
+};
+
 describe("Table", () => {
   it("renders a table", () => {
-    render(<Table data={mockData} />);
+    render(<Table data={mockData} {...defaultDateProps} />);
 
     expect(screen.getByText("App Name")).toBeInTheDocument();
     expect(screen.getByText("Downloads")).toBeInTheDocument();
   });
 
   it("does not render a table if data is empty", () => {
-    render(<Table data={[]} />);
+    render(<Table data={[]} {...defaultDateProps} />);
 
     expect(screen.queryByText("App Name")).not.toBeInTheDocument();
     expect(screen.queryByText("Downloads")).not.toBeInTheDocument();

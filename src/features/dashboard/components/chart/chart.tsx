@@ -1,14 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import type { Response } from "../../types";
-import { dayjsUtc } from "../../config/dayjs";
+import type { AppData, Measure } from "../../../../types";
+import { dayjsUtc } from "../../../../config/dayjs";
 
 type ChartProps = {
-  data: Response;
+  data: AppData[];
+  measure: Measure;
+  startDate: string;
+  endDate: string;
 };
 
-const Chart = ({ data }: ChartProps) => {
+const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
+  void measure;
+  void startDate;
+  void endDate;
+
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const [seriesData, setSeriesData] = useState<Highcharts.SeriesOptionsType[]>(
     [],
