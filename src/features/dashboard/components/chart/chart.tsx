@@ -4,6 +4,7 @@ import HighchartsReact from "highcharts-react-official";
 import type { AppData, Measure } from "../../../../types";
 import { dayjsUtc } from "../../../../config/dayjs";
 import { filterByDateRange } from "../../utils/filterData/filterData";
+import { formatDateRange } from "../../../../utils/formatDate/formatDate";
 
 type ChartProps = {
   data: AppData[];
@@ -53,7 +54,7 @@ const Chart = ({ data, measure, startDate, endDate }: ChartProps) => {
       text: CHART_TITLE[measure],
     },
     subtitle: {
-      text: "TODO",
+      text: formatDateRange(startDate, endDate),
     },
     yAxis: {
       title: {

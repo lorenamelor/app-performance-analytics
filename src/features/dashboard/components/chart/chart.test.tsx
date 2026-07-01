@@ -38,7 +38,7 @@ describe("Chart", () => {
   it("renders the title and subtitle", () => {
     render(<Chart data={mockData} {...defaultFilterProps} />);
     expect(screen.getByText("Downloads by App")).toBeInTheDocument();
-    expect(screen.getByText("TODO")).toBeInTheDocument();
+    expect(screen.getByText("Jan 01, 2023 - Jan 02, 2023")).toBeInTheDocument();
   });
 
   it("does not render a chart if data is empty", () => {
