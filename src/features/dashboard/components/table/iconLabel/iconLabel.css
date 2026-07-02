@@ -1,0 +1,12 @@
+.iconLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iconLabel__icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  object-fit: cover;
+}

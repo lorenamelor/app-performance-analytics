@@ -49,6 +49,16 @@ describe("Table", () => {
     expect(screen.getByText("$6.00")).toBeInTheDocument();
   });
 
+  it("renders app icons next to app names", () => {
+    render(<Table data={mockData} {...defaultDateProps} />);
+
+    expect(screen.getByRole("img", { name: "App 1" })).toHaveAttribute(
+      "src",
+      "https://example.com/icon.png",
+    );
+    expect(screen.getByRole("img", { name: "App 2" })).toBeInTheDocument();
+  });
+
   it("shows a loading indicator while data is loading", () => {
     render(<Table data={[]} {...defaultDateProps} isLoading />);
 

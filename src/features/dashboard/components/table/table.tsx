@@ -8,6 +8,7 @@ import {
   formatCurrency,
   formatCurrencyFromCents,
 } from "../../../../utils/formatCurrency/formatCurrency";
+import IconLabel from "./iconLabel/iconLabel";
 import "./table.css";
 
 type TableProps = {
@@ -20,6 +21,7 @@ type TableProps = {
 type AppRow = {
   id: number;
   appName: string;
+  icon: string;
   downloads: number;
   revenueCents: number;
   rpd: number | null;
@@ -34,6 +36,7 @@ const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
       return {
         id: appData.id,
         appName: appData.name,
+        icon: appData.icon,
         downloads,
         revenueCents,
         rpd,
@@ -43,7 +46,14 @@ const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
 
   const columns = useMemo<GridColDef<AppRow>[]>(
     () => [
-      { field: "appName", headerName: "App Name", width: 150 },
+      {
+        field: "appName",
+        headerName: "App Name",
+        width: 200,
+        renderCell: ({ row }) => (
+          <IconLabel icon={row.icon} label={row.appName} />
+        ),
+      },
       {
         field: "downloads",
         headerName: "Downloads",
