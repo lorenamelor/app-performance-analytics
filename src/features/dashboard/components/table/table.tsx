@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import Card from "../../../../components/card/card";
 import type { AppData } from "../../../../types";
 import { filterByDateRange } from "../../utils/filterData/filterData";
 import { aggregateAppMetrics } from "../../utils/aggregateData/aggregateData";
@@ -8,6 +9,7 @@ import {
   formatCurrency,
   formatCurrencyFromCents,
 } from "../../../../utils/formatCurrency/formatCurrency";
+import { dayjsUtc } from "../../../../config/dayjs";
 import IconLabel from "./iconLabel/iconLabel";
 import "./table.css";
 
@@ -26,8 +28,6 @@ type AppRow = {
   revenueCents: number;
   rpd: number | null;
 };
-
-const NO_DATA_MESSAGE = "No data available";
 
 const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
   const rows = useMemo<AppRow[]>(() => {
@@ -51,7 +51,7 @@ const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
       {
         field: "appName",
         headerName: "App Name",
-        width: 200,
+        flex: 2,
         renderCell: ({ row }) => (
           <IconLabel icon={row.icon} label={row.appName} />
         ),
@@ -59,19 +59,25 @@ const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
       {
         field: "downloads",
         headerName: "Downloads",
-        width: 150,
+        flex: 1,
+        headerAlign: "right",
+        align: "right",
         valueFormatter: (value) => formatNumber(value as number),
       },
       {
         field: "revenueCents",
         headerName: "Revenue",
-        width: 150,
+        flex: 1,
+        headerAlign: "right",
+        align: "right",
         valueFormatter: (value) => formatCurrencyFromCents(value as number),
       },
       {
         field: "rpd",
         headerName: "RPD",
-        width: 150,
+        flex: 1,
+        headerAlign: "right",
+        align: "right",
         valueFormatter: (value) =>
           value === null ? "-" : formatCurrency(value as number),
       },
@@ -80,14 +86,25 @@ const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
   );
 
   return (
-    <div className="table">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        loading={isLoading}
-        localeText={{ noRowsLabel: NO_DATA_MESSAGE }}
-      />
-    </div>
+    <Card className="table">
+      <header className="table__header">
+        <h2 className="table__title">Application Performance Breakdown</h2>
+        <p className="table__subtitle">
+          {`Dynamic cumulative performance metrics between ${dayjsUtc(startDate).format("MMM DD, YY'")} and ${dayjsUtc(endDate).format("MMM DD, YY'")}`}
+        </p>
+      </header>
+
+      <div className="table__grid">
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          loading={isLoading}
+          showCellVerticalBorder={false}
+          showColumnVerticalBorder={false}
+          localeText={{ noRowsLabel: "No data available" }}
+        />
+      </div>
+    </Card>
   );
 };
 

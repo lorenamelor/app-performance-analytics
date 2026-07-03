@@ -31,6 +31,19 @@ const defaultDateProps = {
 };
 
 describe("Table", () => {
+  it("renders the table title and subtitle", () => {
+    render(<Table data={mockData} {...defaultDateProps} />);
+
+    expect(
+      screen.getByRole("heading", { name: "Application Performance Breakdown" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Dynamic cumulative performance metrics between Jan 01, 23' and Jan 02, 23'",
+      ),
+    ).toBeInTheDocument();
+  });
+
   it("renders all column headers", () => {
     render(<Table data={mockData} {...defaultDateProps} />);
 
