@@ -1,5 +1,25 @@
 .chart__header {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  min-height: 32px;
   margin-bottom: 8px;
+}
+
+.chart__content {
+  height: 400px;
+}
+
+.chart__hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 16px 0 0;
+  font-size: 12px;
+  color: #9ca3af;
+  line-height: 1.4;
+}
+
+.chart__hintIcon {
+  flex-shrink: 0;
 }

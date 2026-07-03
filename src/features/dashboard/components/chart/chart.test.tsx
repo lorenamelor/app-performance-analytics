@@ -103,6 +103,16 @@ describe("Chart", () => {
     expect(screen.queryByText("Jan 01, 23'")).not.toBeInTheDocument();
   });
 
+  it("renders the hover hint", () => {
+    render(<Chart data={mockData} {...defaultFilterProps} />);
+
+    expect(
+      screen.getByText(
+        "Hover over the chart lines to interactively isolate and highlight any specific application.",
+      ),
+    ).toBeInTheDocument();
+  });
+
   it("shows a loading indicator while data is loading", () => {
     render(<Chart data={[]} {...defaultFilterProps} isLoading />);
 

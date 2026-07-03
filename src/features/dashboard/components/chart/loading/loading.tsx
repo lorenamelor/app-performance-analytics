@@ -3,7 +3,7 @@ import "./loading.css";
 
 const Loading = () => {
   return (
-    <div className="chart loading" role="status" aria-label="Loading chart">
+    <div className="loading" role="status" aria-label="Loading chart">
       <CircularProgress />
     </div>
   );

@@ -1,3 +1,10 @@
+.measureToggle .MuiToggleButton-root {
+  font-size: 11px;
+  padding: 4px 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .measureToggle .MuiToggleButton-root.Mui-selected {
   background-color: #e3f2fd;
 }

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "../../../../config/highcharts";
+import Card from "../../../../components/card/card";
 import type { AppData, Measure } from "../../../../types";
 import { dayjsUtc } from "../../../../config/dayjs";
 import { filterByDateRange } from "../../utils/filterData/filterData";
@@ -8,8 +9,8 @@ import {
   formatDateRange,
   formatChartAxisDate,
 } from "../../../../utils/formatDate/formatDate";
-import Loading from "./loading/loading";
 import MeasureToggle from "./measureToggle/measureToggle";
+import Loading from "./loading/loading";
 import "./chart.css";
 
 type ChartProps = {
@@ -28,9 +29,6 @@ const CHART_Y_AXIS_TITLE: Record<Measure, string> = {
   downloads: "Downloads",
   revenue: "Revenue ($)",
 };
-
-const NO_DATA_MESSAGE = "No data available";
-const NO_DATA_IN_RANGE_MESSAGE = "No data for the selected date range";
 
 const Chart = ({ data, isLoading, startDate, endDate }: ChartProps) => {
   const [measure, setMeasure] = useState<Measure>("downloads");
@@ -56,8 +54,8 @@ const Chart = ({ data, isLoading, startDate, endDate }: ChartProps) => {
   }, [data, measure, startDate, endDate]);
 
   const noDataMessage = !data.length
-    ? NO_DATA_MESSAGE
-    : NO_DATA_IN_RANGE_MESSAGE;
+    ? "No data available"
+    : "No data for the selected date range";
 
   const chartOptions = useMemo<Highcharts.Options>(
     () => ({
@@ -105,18 +103,32 @@ const Chart = ({ data, isLoading, startDate, endDate }: ChartProps) => {
     [measure, startDate, endDate, seriesData, noDataMessage],
   );
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
-    <div className="chart">
+    <Card className="chart">
       <div className="chart__header">
-        <MeasureToggle value={measure} onChange={setMeasure} />
+        {!isLoading && <MeasureToggle value={measure} onChange={setMeasure} />}
       </div>
 
-      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
-    </div>
+      <div className="chart__content">
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <HighchartsReact
+            highcharts={Highcharts}
+            options={chartOptions}
+            containerProps={{ style: { height: 400 } }}
+          />
+        )}
+      </div>
+
+      <p className="chart__hint">
+        <span className="chart__hintIcon" aria-hidden="true">
+          ⓘ
+        </span>
+        Hover over the chart lines to interactively isolate and highlight any
+        specific application.
+      </p>
+    </Card>
   );
 };
 

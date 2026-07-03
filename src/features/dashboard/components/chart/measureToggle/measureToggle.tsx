@@ -26,13 +26,18 @@ const MeasureToggle = ({ value, onChange }: MeasureToggleProps) => {
   return (
     <ToggleButtonGroup
       exclusive
+      size="small"
       value={value}
       aria-label="Measure"
       className="measureToggle"
       onChange={handleMeasureChange}
     >
       {OPTIONS.map((option) => (
-        <ToggleButton key={option.value} value={option.value}>
+        <ToggleButton
+          key={option.value}
+          value={option.value}
+          aria-label={option.label}
+        >
           {option.label}
         </ToggleButton>
       ))}
