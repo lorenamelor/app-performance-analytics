@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import { dayjsUtc } from "../../../config/dayjs";
-
-dayjs.extend(customParseFormat);
 
 export const DEFAULT_START_DATE = "2020-01-01";
 export const DEFAULT_END_DATE = "2020-01-07";
@@ -29,6 +25,10 @@ function updateUrl(start: string, end: string): void {
   params.set(PARAMS.end, end);
   const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
   window.history.replaceState(null, "", newUrl);
+}
+
+function isInvalidDateRange(startDate: string, endDate: string): boolean {
+  return startDate > endDate;
 }
 
 const useDateRangeFromUrl = () => {
@@ -59,9 +59,15 @@ const useDateRangeFromUrl = () => {
     });
   }, []);
 
+  const isInvalidRange = isInvalidDateRange(
+    dateRange.startDate,
+    dateRange.endDate,
+  );
+
   return {
     startDate: dateRange.startDate,
     endDate: dateRange.endDate,
+    isInvalidRange,
     setStartDate,
     setEndDate,
   };

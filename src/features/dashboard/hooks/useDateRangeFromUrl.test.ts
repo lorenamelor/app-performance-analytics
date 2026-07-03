@@ -18,6 +18,7 @@ describe("useDateRangeFromUrl", () => {
 
     expect(result.current.startDate).toBe(DEFAULT_START_DATE);
     expect(result.current.endDate).toBe(DEFAULT_END_DATE);
+    expect(result.current.isInvalidRange).toBe(false);
   });
 
   it("reads start and end dates from the URL", () => {
@@ -27,6 +28,7 @@ describe("useDateRangeFromUrl", () => {
 
     expect(result.current.startDate).toBe("2020-01-05");
     expect(result.current.endDate).toBe("2020-01-06");
+    expect(result.current.isInvalidRange).toBe(false);
   });
 
   it("falls back to defaults for invalid date params", () => {
@@ -36,6 +38,7 @@ describe("useDateRangeFromUrl", () => {
 
     expect(result.current.startDate).toBe(DEFAULT_START_DATE);
     expect(result.current.endDate).toBe(DEFAULT_END_DATE);
+    expect(result.current.isInvalidRange).toBe(false);
   });
 
   it("updates the URL when setEndDate is called", () => {
@@ -77,5 +80,15 @@ describe("useDateRangeFromUrl", () => {
 
     expect(result.current.startDate).toBe("2020-01-01");
     expect(result.current.endDate).toBe("2020-01-07");
+  });
+
+  it("returns isInvalidRange true when start date is after end date", () => {
+    const { result } = renderHook(() => useDateRangeFromUrl());
+
+    act(() => {
+      result.current.setStartDate("2020-01-10");
+    });
+
+    expect(result.current.isInvalidRange).toBe(true);
   });
 });

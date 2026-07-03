@@ -4,10 +4,11 @@ type DateFieldProps = {
   id: string;
   label: string;
   value: string;
+  error?: string;
   onChange: (value: string) => void;
 };
 
-const DateField = ({ id, label, value, onChange }: DateFieldProps) => {
+const DateField = ({ id, label, value, error, onChange }: DateFieldProps) => {
   return (
     <TextField
       id={id}
@@ -15,6 +16,8 @@ const DateField = ({ id, label, value, onChange }: DateFieldProps) => {
       type="date"
       value={value}
       size="small"
+      error={Boolean(error)}
+      helperText={error}
       onChange={(event) => onChange(event.target.value)}
       slotProps={{
         inputLabel: { shrink: true },
