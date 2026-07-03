@@ -34,6 +34,19 @@ describe("Dashboard", () => {
     });
   });
 
+  it("renders the page title and subtitle", () => {
+    render(<Dashboard />);
+
+    expect(
+      screen.getByRole("heading", { name: "App Performance Analytics" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Real-time monitoring of application downloads, revenues, and key performance indicators.",
+      ),
+    ).toBeInTheDocument();
+  });
+
   it("renders the controls", () => {
     render(<Dashboard />);
 

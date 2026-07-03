@@ -1,0 +1,18 @@
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.dashboard__title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 8px;
+}
+
+.dashboard__subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 24px;
+}
