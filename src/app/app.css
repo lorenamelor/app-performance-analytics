@@ -1,5 +1,14 @@
+:root {
+  --color-text: #1a1a2e;
+  --color-text-muted: #6b7280;
+  --color-bg: #f5f6f8;
+  --color-surface: #fff;
+  --color-border: #e8e8e8;
+  --color-selected: #e3f2fd;
+}
+
 body {
-  background-color: #f5f6f8;
+  background-color: var(--color-bg);
   font-family: "Source Sans 3", "Source Sans 3 Fallback", "Inter", ui-sans-serif,
     sans-serif;
 }

@@ -6,13 +6,13 @@
 .table__title {
   font-size: 18px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--color-text);
   margin: 0 0 4px;
 }
 
 .table__subtitle {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--color-text-muted);
   margin: 0;
 }
 
@@ -26,8 +26,8 @@
 }
 
 .table__grid .MuiDataGrid-columnHeaders {
-  background-color: #f8f9fb;
-  border-bottom: 1px solid #eef0f3;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
   border-radius: 0;
 }
 
@@ -47,12 +47,12 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 .table__grid .MuiDataGrid-cell {
-  border-bottom: 1px solid #f0f1f3;
-  color: #374151;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
 }
 
 .table__grid .MuiDataGrid-row:last-child .MuiDataGrid-cell {
@@ -64,7 +64,7 @@
 }
 
 .table__grid .MuiDataGrid-footerContainer {
-  border-top: 1px solid #f0f1f3;
+  border-top: 1px solid var(--color-border);
 }
 
 .table__grid .MuiDataGrid-filler {

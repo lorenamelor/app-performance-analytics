@@ -7,12 +7,12 @@
 .dashboard__title {
   font-size: 28px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--color-text);
   margin: 0 0 8px;
 }
 
 .dashboard__subtitle {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-text-muted);
   margin: 0 0 24px;
 }
