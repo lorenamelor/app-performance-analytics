@@ -1,5 +1,26 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import Dashboard from "./dashboard";
+import type { AppData } from "../../types";
+
+const mockData: AppData[] = [
+  {
+    id: 1,
+    name: "App 1",
+    icon: "https://example.com/icon.png",
+    data: [
+      ["2020-01-01", 100, 200],
+      ["2020-01-02", 200, 300],
+    ],
+  },
+];
+
+jest.mock("../../hooks/useData", () => ({
+  __esModule: true,
+  default: () => ({
+    data: mockData,
+    isLoading: false,
+  }),
+}));
 
 describe("Dashboard", () => {
   it("renders the controls", () => {

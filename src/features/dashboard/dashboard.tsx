@@ -3,11 +3,9 @@ import Controls from "./components/controls/controls";
 import Chart from "./components/chart/chart";
 import Table from "./components/table/table";
 import useData from "../../hooks/useData";
-import type { Measure } from "../../types";
 
 const Dashboard = () => {
   const { data, isLoading } = useData();
-  const [measure, setMeasure] = useState<Measure>("downloads");
   const [startDate, setStartDate] = useState("2020-01-01");
   const [endDate, setEndDate] = useState("2020-01-07");
 
@@ -16,15 +14,12 @@ const Dashboard = () => {
       <Controls
         startDate={startDate}
         endDate={endDate}
-        measure={measure}
         onStartDateChange={setStartDate}
         onEndDateChange={setEndDate}
-        onMeasureChange={setMeasure}
       />
       <Chart
         data={data}
         isLoading={isLoading}
-        measure={measure}
         startDate={startDate}
         endDate={endDate}
       />

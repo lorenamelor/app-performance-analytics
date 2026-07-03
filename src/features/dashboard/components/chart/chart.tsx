@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import * as Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -6,12 +6,12 @@ import type { AppData, Measure } from "../../../../types";
 import { dayjsUtc } from "../../../../config/dayjs";
 import { filterByDateRange } from "../../utils/filterData/filterData";
 import { formatDateRange, formatChartAxisDate } from "../../../../utils/formatDate/formatDate";
+import MeasureToggle from "./measureToggle/measureToggle";
 import "./chart.css";
 
 type ChartProps = {
   data: AppData[];
   isLoading: boolean;
-  measure: Measure;
   startDate: string;
   endDate: string;
 };
@@ -26,7 +26,8 @@ const CHART_Y_AXIS_TITLE: Record<Measure, string> = {
   revenue: "Revenue ($)",
 };
 
-const Chart = ({ data, isLoading, measure, startDate, endDate }: ChartProps) => {
+const Chart = ({ data, isLoading, startDate, endDate }: ChartProps) => {
+  const [measure, setMeasure] = useState<Measure>("downloads");
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const seriesData = useMemo<Highcharts.SeriesOptionsType[]>(() => {
     return data.map((series) => {
@@ -60,7 +61,7 @@ const Chart = ({ data, isLoading, measure, startDate, endDate }: ChartProps) => 
     return null;
   }
 
-  const options: Highcharts.Options = {
+  const chartOptions: Highcharts.Options = {
     title: {
       text: CHART_TITLE[measure],
     },
@@ -101,11 +102,16 @@ const Chart = ({ data, isLoading, measure, startDate, endDate }: ChartProps) => 
   };
 
   return (
-    <HighchartsReact
-      highcharts={Highcharts}
-      options={options}
-      ref={chartComponentRef}
-    />
+    <div className="chart">
+      <div className="chart__header">
+        <MeasureToggle value={measure} onChange={setMeasure} />
+      </div>
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={chartOptions}
+        ref={chartComponentRef}
+      />
+    </div>
   );
 };
 

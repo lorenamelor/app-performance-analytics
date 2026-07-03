@@ -1,3 +1,9 @@
+.chart__header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
 .chart--loading {
   display: flex;
   justify-content: center;

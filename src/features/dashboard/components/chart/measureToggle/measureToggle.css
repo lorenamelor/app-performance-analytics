@@ -1,0 +1,7 @@
+.measureToggle .MuiToggleButton-root.Mui-selected {
+  background-color: #e3f2fd;
+}
+
+.measureToggle .MuiToggleButton-root.Mui-selected:hover {
+  background-color: #bbdefb;
+}

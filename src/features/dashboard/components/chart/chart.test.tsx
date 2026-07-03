@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import Chart from "./chart";
 import type { AppData } from "../../../../types";
 
@@ -25,16 +25,24 @@ const mockData: AppData[] = [
 
 const defaultFilterProps = {
   isLoading: false,
-  measure: "downloads" as const,
   startDate: "2023-01-01",
   endDate: "2023-01-02",
 };
 
 describe("Chart", () => {
-  it("renders downloads y-axis label when measure is downloads", () => {
+  it("renders the measure toggle", () => {
     render(<Chart data={mockData} {...defaultFilterProps} />);
 
-    expect(screen.getByText("Downloads")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Downloads" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Revenue" })).toBeInTheDocument();
+  });
+
+  it("renders downloads y-axis label when measure is downloads", () => {
+    const { container } = render(<Chart data={mockData} {...defaultFilterProps} />);
+
+    expect(container.querySelector(".highcharts-axis-title")).toHaveTextContent(
+      "Downloads",
+    );
   });
 
   it("renders the downloads title and date range subtitle", () => {
@@ -44,10 +52,10 @@ describe("Chart", () => {
     expect(screen.getByText("Jan 01, 2023 - Jan 02, 2023")).toBeInTheDocument();
   });
 
-  it("renders revenue title and y-axis when measure is revenue", () => {
-    render(
-      <Chart data={mockData} {...defaultFilterProps} measure="revenue" />,
-    );
+  it("renders revenue title and y-axis when revenue is selected", () => {
+    render(<Chart data={mockData} {...defaultFilterProps} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Revenue" }));
 
     expect(screen.getByText("Revenue by App")).toBeInTheDocument();
     expect(screen.getByText("Revenue ($)")).toBeInTheDocument();
@@ -92,12 +100,16 @@ describe("Chart", () => {
     expect(screen.getByRole("status", { name: "Loading chart" })).toBeInTheDocument();
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
     expect(screen.queryByText("Downloads by App")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Downloads" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Revenue" })).not.toBeInTheDocument();
   });
 
   it("does not render a chart when data is empty and not loading", () => {
     render(<Chart data={[]} {...defaultFilterProps} />);
 
     expect(screen.queryByText("Downloads by App")).not.toBeInTheDocument();
-    expect(screen.queryByText("Downloads")).not.toBeInTheDocument();
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Downloads" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Revenue" })).not.toBeInTheDocument();
   });
 });
