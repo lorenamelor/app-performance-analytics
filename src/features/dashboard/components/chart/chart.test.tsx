@@ -46,32 +46,42 @@ describe("Chart", () => {
   });
 
   it("renders the downloads title and date range subtitle", () => {
-    render(<Chart data={mockData} {...defaultFilterProps} />);
+    const { container } = render(<Chart data={mockData} {...defaultFilterProps} />);
 
-    expect(screen.getByText("Downloads by App")).toBeInTheDocument();
-    expect(screen.getByText("Jan 01, 2023 - Jan 02, 2023")).toBeInTheDocument();
+    expect(container.querySelector(".highcharts-title")).toHaveTextContent(
+      "Downloads by App",
+    );
+    expect(container.querySelector(".highcharts-subtitle")).toHaveTextContent(
+      "Jan 01, 2023 - Jan 02, 2023",
+    );
   });
 
   it("renders revenue title and y-axis when revenue is selected", () => {
-    render(<Chart data={mockData} {...defaultFilterProps} />);
+    const { container } = render(<Chart data={mockData} {...defaultFilterProps} />);
 
     fireEvent.click(screen.getByRole("button", { name: "Revenue" }));
 
-    expect(screen.getByText("Revenue by App")).toBeInTheDocument();
-    expect(screen.getByText("Revenue ($)")).toBeInTheDocument();
+    expect(container.querySelector(".highcharts-title")).toHaveTextContent(
+      "Revenue by App",
+    );
+    expect(container.querySelector(".highcharts-axis-title")).toHaveTextContent(
+      "Revenue ($)",
+    );
   });
 
   it("updates the subtitle when the date range changes", () => {
-    render(
+    const { container } = render(
       <Chart
         data={mockData}
         {...defaultFilterProps}
-        startDate="2020-01-01"
-        endDate="2020-01-07"
+        startDate="2023-01-02"
+        endDate="2023-01-02"
       />,
     );
 
-    expect(screen.getByText("Jan 01, 2020 - Jan 07, 2020")).toBeInTheDocument();
+    expect(container.querySelector(".highcharts-subtitle")).toHaveTextContent(
+      "Jan 02, 2023 - Jan 02, 2023",
+    );
   });
 
   it("formats x-axis dates", () => {
@@ -104,12 +114,31 @@ describe("Chart", () => {
     expect(screen.queryByRole("button", { name: "Revenue" })).not.toBeInTheDocument();
   });
 
-  it("does not render a chart when data is empty and not loading", () => {
-    render(<Chart data={[]} {...defaultFilterProps} />);
+  it("shows an empty state when data is empty and not loading", () => {
+    const { container } = render(<Chart data={[]} {...defaultFilterProps} />);
 
-    expect(screen.queryByText("Downloads by App")).not.toBeInTheDocument();
-    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(container.querySelector(".highcharts-no-data")).toHaveTextContent(
+      "No data available",
+    );
     expect(screen.queryByRole("button", { name: "Downloads" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Revenue" })).not.toBeInTheDocument();
+  });
+
+  it("shows an empty state when no points fall within the selected date range", () => {
+    const { container } = render(
+      <Chart
+        data={mockData}
+        {...defaultFilterProps}
+        startDate="2025-01-01"
+        endDate="2025-01-07"
+      />,
+    );
+
+    expect(container.querySelector(".highcharts-no-data")).toHaveTextContent(
+      "No data for the selected date range",
+    );
+    expect(screen.getByRole("button", { name: "Downloads" })).toBeInTheDocument();
+    expect(container.querySelector(".highcharts-title")).toHaveTextContent(
+      "Downloads by App",
+    );
   });
 });

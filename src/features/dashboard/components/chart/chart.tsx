@@ -1,11 +1,14 @@
-import { useMemo, useRef, useState } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
-import * as Highcharts from "highcharts";
+import { useMemo, useState } from "react";
 import HighchartsReact from "highcharts-react-official";
+import Highcharts from "../../../../config/highcharts";
 import type { AppData, Measure } from "../../../../types";
 import { dayjsUtc } from "../../../../config/dayjs";
 import { filterByDateRange } from "../../utils/filterData/filterData";
-import { formatDateRange, formatChartAxisDate } from "../../../../utils/formatDate/formatDate";
+import {
+  formatDateRange,
+  formatChartAxisDate,
+} from "../../../../utils/formatDate/formatDate";
+import Loading from "./loading/loading";
 import MeasureToggle from "./measureToggle/measureToggle";
 import "./chart.css";
 
@@ -26,9 +29,12 @@ const CHART_Y_AXIS_TITLE: Record<Measure, string> = {
   revenue: "Revenue ($)",
 };
 
+const NO_DATA_MESSAGE = "No data available";
+const NO_DATA_IN_RANGE_MESSAGE = "No data for the selected date range";
+
 const Chart = ({ data, isLoading, startDate, endDate }: ChartProps) => {
   const [measure, setMeasure] = useState<Measure>("downloads");
-  const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
+
   const seriesData = useMemo<Highcharts.SeriesOptionsType[]>(() => {
     return data.map((series) => {
       const filteredData = filterByDateRange(series.data, startDate, endDate);
@@ -37,7 +43,7 @@ const Chart = ({ data, isLoading, startDate, endDate }: ChartProps) => {
         name: series.name,
         type: "line",
         data: filteredData.map(([date, downloads, revenueCents]) => {
-          const dateMs = dayjsUtc(date).valueOf(); // convert date string to unix milliseconds
+          const dateMs = dayjsUtc(date).valueOf();
           const yValue =
             measure === "downloads" ? downloads : revenueCents / 100;
           return {
@@ -49,68 +55,68 @@ const Chart = ({ data, isLoading, startDate, endDate }: ChartProps) => {
     });
   }, [data, measure, startDate, endDate]);
 
-  if (isLoading) {
-    return (
-      <div className="chart chart--loading" role="status" aria-label="Loading chart">
-        <CircularProgress />
-      </div>
-    );
-  }
+  const noDataMessage = !data.length
+    ? NO_DATA_MESSAGE
+    : NO_DATA_IN_RANGE_MESSAGE;
 
-  if (!seriesData.length) {
-    return null;
-  }
-
-  const chartOptions: Highcharts.Options = {
-    title: {
-      text: CHART_TITLE[measure],
-    },
-    subtitle: {
-      text: formatDateRange(startDate, endDate),
-    },
-    yAxis: {
-      title: {
-        text: CHART_Y_AXIS_TITLE[measure],
+  const chartOptions = useMemo<Highcharts.Options>(
+    () => ({
+      lang: {
+        noData: noDataMessage,
       },
-    },
-    xAxis: {
-      type: "datetime",
-      labels: {
-        formatter: function () {
-          return formatChartAxisDate(this.value as number);
+      title: {
+        text: CHART_TITLE[measure],
+      },
+      subtitle: {
+        text: formatDateRange(startDate, endDate),
+      },
+      yAxis: {
+        title: {
+          text: CHART_Y_AXIS_TITLE[measure],
         },
       },
-    },
-    legend: {
-      layout: "vertical",
-      align: "right",
-      verticalAlign: "middle",
-    },
-    plotOptions: {
-      series: {
-        marker: {
-          enabled: false,
-          states: {
-            hover: {
-              enabled: false,
+      xAxis: {
+        type: "datetime",
+        labels: {
+          formatter: function () {
+            return formatChartAxisDate(this.value as number);
+          },
+        },
+      },
+      legend: {
+        layout: "vertical",
+        align: "right",
+        verticalAlign: "middle",
+      },
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: false,
+            states: {
+              hover: {
+                enabled: false,
+              },
             },
           },
         },
       },
-    },
-    series: seriesData,
-  };
+      series: seriesData,
+    }),
+    [measure, startDate, endDate, seriesData, noDataMessage],
+  );
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="chart">
-      <div className="chart__header">
-        <MeasureToggle value={measure} onChange={setMeasure} />
-      </div>
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={chartOptions}
-        ref={chartComponentRef}
-      />
+      {data.length > 0 && (
+        <div className="chart__header">
+          <MeasureToggle value={measure} onChange={setMeasure} />
+        </div>
+      )}
+      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
   );
 };
