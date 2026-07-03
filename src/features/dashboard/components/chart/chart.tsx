@@ -4,7 +4,6 @@ import Highcharts from "../../../../config/highcharts";
 import Card from "../../../../components/card/card";
 import type { AppData, Measure } from "../../types";
 import { dayjsUtc } from "../../../../config/dayjs";
-import { filterByDateRange } from "../../utils/filterData/filterData";
 import {
   formatDateRange,
   formatChartAxisDate,
@@ -34,24 +33,20 @@ const Chart = ({ data, isLoading, startDate, endDate }: ChartProps) => {
   const [measure, setMeasure] = useState<Measure>("downloads");
 
   const seriesData = useMemo<Highcharts.SeriesOptionsType[]>(() => {
-    return data.map((series) => {
-      const filteredData = filterByDateRange(series.data, startDate, endDate);
-
-      return {
-        name: series.name,
-        type: "line",
-        data: filteredData.map(([date, downloads, revenueCents]) => {
-          const dateMs = dayjsUtc(date).valueOf();
-          const yValue =
-            measure === "downloads" ? downloads : revenueCents / 100;
-          return {
-            x: dateMs,
-            y: yValue,
-          };
-        }),
-      };
-    });
-  }, [data, measure, startDate, endDate]);
+    return data.map((series) => ({
+      name: series.name,
+      type: "line",
+      data: series.data.map(([date, downloads, revenueCents]) => {
+        const dateMs = dayjsUtc(date).valueOf();
+        const yValue =
+          measure === "downloads" ? downloads : revenueCents / 100;
+        return {
+          x: dateMs,
+          y: yValue,
+        };
+      }),
+    }));
+  }, [data, measure]);
 
   const noDataMessage = !data.length
     ? "No data available"

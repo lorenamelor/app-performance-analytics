@@ -1,15 +1,26 @@
+import { useMemo } from "react";
 import Controls from "./components/controls/controls";
 import Chart from "./components/chart/chart";
 import Table from "./components/table/table";
 import ErrorState from "./components/errorState/errorState";
 import useData from "./hooks/useData/useData";
 import useDateRangeFromUrl from "./hooks/useDateRangeFromUrl/useDateRangeFromUrl";
+import { filterByDateRange } from "./utils/filterData/filterData";
 import "./dashboard.css";
 
 const Dashboard = () => {
   const { data, isLoading, error, refetch } = useData();
   const { startDate, endDate, isInvalidRange, setStartDate, setEndDate } =
     useDateRangeFromUrl();
+
+  const filteredData = useMemo(
+    () =>
+      data.map((app) => ({
+        ...app,
+        data: filterByDateRange(app.data, startDate, endDate),
+      })),
+    [data, startDate, endDate],
+  );
 
   return (
     <div className="dashboard">
@@ -32,13 +43,13 @@ const Dashboard = () => {
       ) : (
         <>
           <Chart
-            data={data}
+            data={filteredData}
             isLoading={isLoading}
             startDate={startDate}
             endDate={endDate}
           />
           <Table
-            data={data}
+            data={filteredData}
             isLoading={isLoading}
             startDate={startDate}
             endDate={endDate}

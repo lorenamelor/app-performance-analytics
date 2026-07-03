@@ -1,6 +1,18 @@
 import { render, screen } from "@testing-library/react";
 import Table from "./table";
 import type { AppData } from "../../types";
+import { filterByDateRange } from "../../utils/filterData/filterData";
+
+function filterAppData(
+  data: AppData[],
+  startDate: string,
+  endDate: string,
+): AppData[] {
+  return data.map((app) => ({
+    ...app,
+    data: filterByDateRange(app.data, startDate, endDate),
+  }));
+}
 
 const mockData: AppData[] = [
   {
@@ -30,9 +42,24 @@ const defaultDateProps = {
   endDate: "2023-01-02",
 };
 
+function renderTable(
+  data: AppData[],
+  props: Partial<typeof defaultDateProps> = {},
+) {
+  const { startDate, endDate, isLoading } = { ...defaultDateProps, ...props };
+  return render(
+    <Table
+      data={filterAppData(data, startDate, endDate)}
+      isLoading={isLoading}
+      startDate={startDate}
+      endDate={endDate}
+    />,
+  );
+}
+
 describe("Table", () => {
   it("renders the table title and subtitle", () => {
-    render(<Table data={mockData} {...defaultDateProps} />);
+    renderTable(mockData);
 
     expect(
       screen.getByRole("heading", { name: "Application Performance Breakdown" }),
@@ -45,7 +72,7 @@ describe("Table", () => {
   });
 
   it("renders all column headers", () => {
-    render(<Table data={mockData} {...defaultDateProps} />);
+    renderTable(mockData);
 
     expect(screen.getByText("App Name")).toBeInTheDocument();
     expect(screen.getByText("Downloads")).toBeInTheDocument();
@@ -54,7 +81,7 @@ describe("Table", () => {
   });
 
   it("aggregates metrics within the selected date range", () => {
-    render(<Table data={mockData} {...defaultDateProps} />);
+    renderTable(mockData);
 
     expect(screen.getByText("300")).toBeInTheDocument();
     expect(screen.getByText("400")).toBeInTheDocument();
@@ -63,7 +90,7 @@ describe("Table", () => {
   });
 
   it("excludes data outside the selected date range", () => {
-    render(<Table data={mockData} {...defaultDateProps} />);
+    renderTable(mockData);
 
     expect(screen.queryByText("999")).not.toBeInTheDocument();
   });
@@ -78,14 +105,10 @@ describe("Table", () => {
       },
     ];
 
-    render(
-      <Table
-        data={dataWithLargeDownloads}
-        startDate="2023-01-01"
-        endDate="2023-01-01"
-        isLoading={false}
-      />,
-    );
+    renderTable(dataWithLargeDownloads, {
+      startDate: "2023-01-01",
+      endDate: "2023-01-01",
+    });
 
     expect(screen.getByText("80,000")).toBeInTheDocument();
   });
@@ -100,13 +123,13 @@ describe("Table", () => {
       },
     ];
 
-    render(<Table data={dataWithNoDownloads} {...defaultDateProps} />);
+    renderTable(dataWithNoDownloads);
 
     expect(screen.getByText("-")).toBeInTheDocument();
   });
 
   it("renders app icons next to app names", () => {
-    const { container } = render(<Table data={mockData} {...defaultDateProps} />);
+    const { container } = renderTable(mockData);
 
     const icons = container.querySelectorAll(".iconLabel__icon");
     expect(icons).toHaveLength(2);
@@ -116,13 +139,13 @@ describe("Table", () => {
   });
 
   it("shows a loading indicator while data is loading", () => {
-    render(<Table data={[]} {...defaultDateProps} isLoading />);
+    renderTable([], { isLoading: true });
 
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
   });
 
   it("shows an empty state when data is empty and not loading", () => {
-    render(<Table data={[]} {...defaultDateProps} />);
+    renderTable([]);
 
     expect(screen.getByText("No data available")).toBeInTheDocument();
     expect(screen.getByText("App Name")).toBeInTheDocument();

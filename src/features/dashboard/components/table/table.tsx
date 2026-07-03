@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Card from "../../../../components/card/card";
 import type { AppData } from "../../types";
-import { filterByDateRange } from "../../utils/filterData/filterData";
 import { aggregateAppMetrics } from "../../utils/aggregateData/aggregateData";
 import { formatNumber } from "../../../../utils/formatNumber/formatNumber";
 import {
@@ -32,8 +31,7 @@ type AppRow = {
 const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
   const rows = useMemo<AppRow[]>(() => {
     return data.map((appData) => {
-      const filteredData = filterByDateRange(appData.data, startDate, endDate);
-      const { downloads, revenueCents, rpd } = aggregateAppMetrics(filteredData);
+      const { downloads, revenueCents, rpd } = aggregateAppMetrics(appData.data);
 
       return {
         id: appData.id,
@@ -44,7 +42,7 @@ const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
         rpd,
       };
     });
-  }, [data, startDate, endDate]);
+  }, [data]);
 
   const columns = useMemo<GridColDef<AppRow>[]>(
     () => [

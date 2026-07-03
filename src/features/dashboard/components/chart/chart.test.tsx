@@ -1,6 +1,18 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import Chart from "./chart";
 import type { AppData } from "../../types";
+import { filterByDateRange } from "../../utils/filterData/filterData";
+
+function filterAppData(
+  data: AppData[],
+  startDate: string,
+  endDate: string,
+): AppData[] {
+  return data.map((app) => ({
+    ...app,
+    data: filterByDateRange(app.data, startDate, endDate),
+  }));
+}
 
 const mockData: AppData[] = [
   {
@@ -29,6 +41,21 @@ const defaultFilterProps = {
   endDate: "2023-01-02",
 };
 
+function renderChart(
+  data: AppData[],
+  props: Partial<typeof defaultFilterProps> = {},
+) {
+  const { startDate, endDate, isLoading } = { ...defaultFilterProps, ...props };
+  return render(
+    <Chart
+      data={filterAppData(data, startDate, endDate)}
+      isLoading={isLoading}
+      startDate={startDate}
+      endDate={endDate}
+    />,
+  );
+}
+
 function getChartRegion(title: RegExp) {
   const [chart] = screen.getAllByRole("region", { name: title });
   return chart;
@@ -36,21 +63,21 @@ function getChartRegion(title: RegExp) {
 
 describe("Chart", () => {
   it("renders the measure toggle", () => {
-    render(<Chart data={mockData} {...defaultFilterProps} />);
+    renderChart(mockData);
 
     expect(screen.getByRole("button", { name: "Downloads" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Revenue" })).toBeInTheDocument();
   });
 
   it("renders downloads y-axis label when measure is downloads", () => {
-    render(<Chart data={mockData} {...defaultFilterProps} />);
+    renderChart(mockData);
 
     expect(screen.getAllByText("Downloads")).toHaveLength(2);
     expect(screen.queryByText("Revenue ($)")).not.toBeInTheDocument();
   });
 
   it("renders the downloads title and date range subtitle", () => {
-    render(<Chart data={mockData} {...defaultFilterProps} />);
+    renderChart(mockData);
 
     const chart = getChartRegion(/Downloads by App/);
     expect(
@@ -59,7 +86,7 @@ describe("Chart", () => {
   });
 
   it("renders revenue title and y-axis when revenue is selected", () => {
-    render(<Chart data={mockData} {...defaultFilterProps} />);
+    renderChart(mockData);
 
     fireEvent.click(screen.getByRole("button", { name: "Revenue" }));
 
@@ -68,14 +95,7 @@ describe("Chart", () => {
   });
 
   it("updates the subtitle when the date range changes", () => {
-    render(
-      <Chart
-        data={mockData}
-        {...defaultFilterProps}
-        startDate="2023-01-02"
-        endDate="2023-01-02"
-      />,
-    );
+    renderChart(mockData, { startDate: "2023-01-02", endDate: "2023-01-02" });
 
     const chart = getChartRegion(/Downloads by App/);
     expect(
@@ -84,27 +104,20 @@ describe("Chart", () => {
   });
 
   it("formats x-axis dates", () => {
-    render(<Chart data={mockData} {...defaultFilterProps} />);
+    renderChart(mockData);
 
     expect(screen.getByText("Jan 01, 23'")).toBeInTheDocument();
   });
 
   it("filters chart points by the selected date range", () => {
-    render(
-      <Chart
-        data={mockData}
-        {...defaultFilterProps}
-        startDate="2023-01-02"
-        endDate="2023-01-02"
-      />,
-    );
+    renderChart(mockData, { startDate: "2023-01-02", endDate: "2023-01-02" });
 
     expect(screen.getByText("Jan 02, 23'")).toBeInTheDocument();
     expect(screen.queryByText("Jan 01, 23'")).not.toBeInTheDocument();
   });
 
   it("renders the hover hint", () => {
-    render(<Chart data={mockData} {...defaultFilterProps} />);
+    renderChart(mockData);
 
     expect(
       screen.getByText(
@@ -133,14 +146,7 @@ describe("Chart", () => {
   });
 
   it("shows an empty state when no points fall within the selected date range", () => {
-    render(
-      <Chart
-        data={mockData}
-        {...defaultFilterProps}
-        startDate="2025-01-01"
-        endDate="2025-01-07"
-      />,
-    );
+    renderChart(mockData, { startDate: "2025-01-01", endDate: "2025-01-07" });
 
     expect(
       screen.getByText("No data for the selected date range"),
