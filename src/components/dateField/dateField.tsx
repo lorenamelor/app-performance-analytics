@@ -1,4 +1,4 @@
-import "./dateField.css";
+import TextField from "@mui/material/TextField";
 
 type DateFieldProps = {
   id: string;
@@ -9,16 +9,17 @@ type DateFieldProps = {
 
 const DateField = ({ id, label, value, onChange }: DateFieldProps) => {
   return (
-    <p className="dateField">
-      <label htmlFor={id}>{label}:</label>{" "}
-      <input
-        id={id}
-        type="date"
-        className="dateField__input"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-      />
-    </p>
+    <TextField
+      id={id}
+      label={label}
+      type="date"
+      value={value}
+      size="small"
+      onChange={(event) => onChange(event.target.value)}
+      slotProps={{
+        inputLabel: { shrink: true },
+      }}
+    />
   );
 };
 
