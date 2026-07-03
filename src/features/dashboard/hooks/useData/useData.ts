@@ -36,11 +36,14 @@ const useData = () => {
     }
   }, []);
 
-  useEffect(function loadDashboardDataOnMount() {
-    // Simulates network latency to demonstrate the bonus loading state.
-    const timer = setTimeout(loadData, LOAD_DELAY_MS);
-    return () => clearTimeout(timer);
-  }, [loadData]);
+  useEffect(
+    function loadDashboardDataOnMount() {
+      // Simulates network latency
+      const timer = setTimeout(loadData, LOAD_DELAY_MS);
+      return () => clearTimeout(timer);
+    },
+    [loadData],
+  );
 
   const refetch = useCallback(() => {
     loadData();
