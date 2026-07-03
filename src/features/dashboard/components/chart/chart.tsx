@@ -111,11 +111,10 @@ const Chart = ({ data, isLoading, startDate, endDate }: ChartProps) => {
 
   return (
     <div className="chart">
-      {data.length > 0 && (
-        <div className="chart__header">
-          <MeasureToggle value={measure} onChange={setMeasure} />
-        </div>
-      )}
+      <div className="chart__header">
+        <MeasureToggle value={measure} onChange={setMeasure} />
+      </div>
+
       <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </div>
   );
