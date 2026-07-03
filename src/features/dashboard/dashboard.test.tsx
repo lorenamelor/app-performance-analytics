@@ -23,6 +23,10 @@ jest.mock("../../hooks/useData", () => ({
 }));
 
 describe("Dashboard", () => {
+  beforeEach(() => {
+    window.history.replaceState({}, "", "/");
+  });
+
   it("renders the controls", () => {
     render(<Dashboard />);
 
@@ -43,5 +47,26 @@ describe("Dashboard", () => {
       "aria-pressed",
       "false",
     );
+  });
+
+  it("reads the date range from the URL", () => {
+    window.history.replaceState({}, "", "/?start=2020-01-02&end=2020-01-03");
+
+    render(<Dashboard />);
+
+    expect(screen.getByLabelText(/start date/i)).toHaveValue("2020-01-02");
+    expect(screen.getByLabelText(/end date/i)).toHaveValue("2020-01-03");
+  });
+
+  it("updates the URL when the end date changes", () => {
+    render(<Dashboard />);
+
+    fireEvent.change(screen.getByLabelText(/end date/i), {
+      target: { value: "2020-01-10" },
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    expect(params.get("start")).toBe("2020-01-01");
+    expect(params.get("end")).toBe("2020-01-10");
   });
 });

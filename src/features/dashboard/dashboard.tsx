@@ -1,13 +1,12 @@
-import { useState } from "react";
 import Controls from "./components/controls/controls";
 import Chart from "./components/chart/chart";
 import Table from "./components/table/table";
 import useData from "../../hooks/useData";
+import useDateRangeFromUrl from "./hooks/useDateRangeFromUrl";
 
 const Dashboard = () => {
   const { data, isLoading } = useData();
-  const [startDate, setStartDate] = useState("2020-01-01");
-  const [endDate, setEndDate] = useState("2020-01-07");
+  const { startDate, endDate, setStartDate, setEndDate } = useDateRangeFromUrl();
 
   return (
     <>

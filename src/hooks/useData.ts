@@ -5,7 +5,7 @@ const useData = () => {
   const [data, setData] = useState<AppData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(function loadDashboardData() {
     const timer = setTimeout(async () => {
       try {
         const response = await fetch("/data.json");
