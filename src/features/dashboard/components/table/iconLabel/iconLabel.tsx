@@ -8,7 +8,13 @@ type IconLabelProps = {
 const IconLabel = ({ icon, label }: IconLabelProps) => {
   return (
     <div className="iconLabel">
-      <img src={icon} alt={label} className="iconLabel__icon" />
+      <img
+        src={icon}
+        alt=""
+        aria-hidden
+        loading="lazy"
+        className="iconLabel__icon"
+      />
       <span>{label}</span>
     </div>
   );

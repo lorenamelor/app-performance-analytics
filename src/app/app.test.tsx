@@ -5,6 +5,7 @@ describe("App", () => {
   it("renders the dashboard controls", () => {
     render(<App />);
 
+    expect(screen.getByRole("main")).toBeInTheDocument();
     expect(screen.getByLabelText(/start date/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/end date/i)).toBeInTheDocument();
   });

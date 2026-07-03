@@ -3,9 +3,9 @@ import "./app.css";
 
 const App = () => {
   return (
-    <div className="container">
+    <main className="container">
       <Dashboard />
-    </div>
+    </main>
   );
 };
 
