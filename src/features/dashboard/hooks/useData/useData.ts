@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { AppData } from "../types";
+import type { AppData } from "../../types";
 
 export const FETCH_ERROR_MESSAGE = "Failed to load data. Please try again.";
 

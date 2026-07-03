@@ -1,5 +1,5 @@
 import { dayjsUtc } from "../../../../config/dayjs";
-import type { AppDataTuple } from "../../../../types";
+import type { AppDataTuple } from "../../types";
 
 export function filterByDateRange(
   tuples: AppDataTuple[],

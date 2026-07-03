@@ -2,8 +2,8 @@ import Controls from "./components/controls/controls";
 import Chart from "./components/chart/chart";
 import Table from "./components/table/table";
 import ErrorState from "./components/errorState/errorState";
-import useData from "../../hooks/useData";
-import useDateRangeFromUrl from "./hooks/useDateRangeFromUrl";
+import useData from "./hooks/useData/useData";
+import useDateRangeFromUrl from "./hooks/useDateRangeFromUrl/useDateRangeFromUrl";
 import "./dashboard.css";
 
 const Dashboard = () => {

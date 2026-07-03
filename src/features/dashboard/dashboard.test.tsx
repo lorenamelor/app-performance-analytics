@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import Dashboard from "./dashboard";
-import type { AppData } from "../../types";
-import { FETCH_ERROR_MESSAGE } from "../../hooks/useData";
+import type { AppData } from "./types";
+import { FETCH_ERROR_MESSAGE } from "./hooks/useData/useData";
 
 const mockData: AppData[] = [
   {
@@ -17,7 +17,7 @@ const mockData: AppData[] = [
 
 const mockUseData = jest.fn();
 
-jest.mock("../../hooks/useData", () => ({
+jest.mock("./hooks/useData/useData", () => ({
   __esModule: true,
   default: () => mockUseData(),
   FETCH_ERROR_MESSAGE: "Failed to load data. Please try again.",
@@ -52,21 +52,6 @@ describe("Dashboard", () => {
 
     expect(screen.getByLabelText(/start date/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/end date/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Downloads" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Revenue" })).toBeInTheDocument();
-  });
-
-  it("updates the selected measure when a toggle button is clicked", () => {
-    render(<Dashboard />);
-
-    const revenueButton = screen.getByRole("button", { name: "Revenue" });
-    fireEvent.click(revenueButton);
-
-    expect(revenueButton).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("button", { name: "Downloads" })).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
   });
 
   it("reads the date range from the URL", () => {

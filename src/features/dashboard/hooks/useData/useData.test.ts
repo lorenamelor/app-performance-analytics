@@ -1,6 +1,6 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import useData, { FETCH_ERROR_MESSAGE } from "./useData";
-import type { AppData } from "../types";
+import type { AppData } from "../../types";
 
 const mockData: AppData[] = [
   {

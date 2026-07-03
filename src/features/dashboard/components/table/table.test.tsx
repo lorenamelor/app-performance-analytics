@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import Table from "./table";
-import type { AppData } from "../../../../types";
+import type { AppData } from "../../types";
 
 const mockData: AppData[] = [
   {

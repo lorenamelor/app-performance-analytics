@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Card from "../../../../components/card/card";
-import type { AppData } from "../../../../types";
+import type { AppData } from "../../types";
 import { filterByDateRange } from "../../utils/filterData/filterData";
 import { aggregateAppMetrics } from "../../utils/aggregateData/aggregateData";
 import { formatNumber } from "../../../../utils/formatNumber/formatNumber";

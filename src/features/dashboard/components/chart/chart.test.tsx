@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import Chart from "./chart";
-import type { AppData } from "../../../../types";
+import type { AppData } from "../../types";
 
 const mockData: AppData[] = [
   {

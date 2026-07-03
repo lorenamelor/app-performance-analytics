@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { dayjsUtc } from "../../../config/dayjs";
+import { dayjsUtc } from "../../../../config/dayjs";
 
 export const DEFAULT_START_DATE = "2020-01-01";
 export const DEFAULT_END_DATE = "2020-01-07";

@@ -1,5 +1,5 @@
 import { aggregateAppMetrics } from "./aggregateData";
-import type { AppDataTuple } from "../../../../types";
+import type { AppDataTuple } from "../../types";
 
 describe("aggregateAppMetrics", () => {
   it("sums downloads and revenue in cents", () => {

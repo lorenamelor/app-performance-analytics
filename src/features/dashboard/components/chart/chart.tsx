@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "../../../../config/highcharts";
 import Card from "../../../../components/card/card";
-import type { AppData, Measure } from "../../../../types";
+import type { AppData, Measure } from "../../types";
 import { dayjsUtc } from "../../../../config/dayjs";
 import { filterByDateRange } from "../../utils/filterData/filterData";
 import {

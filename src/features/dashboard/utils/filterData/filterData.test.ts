@@ -1,5 +1,5 @@
 import { filterByDateRange } from "./filterData";
-import type { AppDataTuple } from "../../../../types";
+import type { AppDataTuple } from "../../types";
 
 const tuples: AppDataTuple[] = [
   ["2020-01-01", 10, 100],
