@@ -27,6 +27,8 @@ type AppRow = {
   rpd: number | null;
 };
 
+const NO_DATA_MESSAGE = "No data available";
+
 const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
   const rows = useMemo<AppRow[]>(() => {
     return data.map((appData) => {
@@ -77,13 +79,14 @@ const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
     [],
   );
 
-  if (!isLoading && !data.length) {
-    return null;
-  }
-
   return (
     <div className="table">
-      <DataGrid rows={rows} columns={columns} loading={isLoading} />
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        loading={isLoading}
+        localeText={{ noRowsLabel: NO_DATA_MESSAGE }}
+      />
     </div>
   );
 };

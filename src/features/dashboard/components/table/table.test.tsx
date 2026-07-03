@@ -93,13 +93,13 @@ describe("Table", () => {
   });
 
   it("renders app icons next to app names", () => {
-    render(<Table data={mockData} {...defaultDateProps} />);
+    const { container } = render(<Table data={mockData} {...defaultDateProps} />);
 
-    expect(screen.getByRole("img", { name: "App 1" })).toHaveAttribute(
-      "src",
-      "https://example.com/icon.png",
-    );
-    expect(screen.getByRole("img", { name: "App 2" })).toBeInTheDocument();
+    const icons = container.querySelectorAll(".iconLabel__icon");
+    expect(icons).toHaveLength(2);
+    expect(icons[0]).toHaveAttribute("src", "https://example.com/icon.png");
+    expect(screen.getByText("App 1")).toBeInTheDocument();
+    expect(screen.getByText("App 2")).toBeInTheDocument();
   });
 
   it("shows a loading indicator while data is loading", () => {
@@ -108,10 +108,11 @@ describe("Table", () => {
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
   });
 
-  it("does not render a table when data is empty and not loading", () => {
+  it("shows an empty state when data is empty and not loading", () => {
     render(<Table data={[]} {...defaultDateProps} />);
 
-    expect(screen.queryByText("App Name")).not.toBeInTheDocument();
-    expect(screen.queryByText("Downloads")).not.toBeInTheDocument();
+    expect(screen.getByText("No data available")).toBeInTheDocument();
+    expect(screen.getByText("App Name")).toBeInTheDocument();
+    expect(screen.getByText("Downloads")).toBeInTheDocument();
   });
 });
