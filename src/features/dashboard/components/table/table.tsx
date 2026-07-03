@@ -84,7 +84,7 @@ const Table = ({ data, isLoading, startDate, endDate }: TableProps) => {
   );
 
   return (
-    <Card className="table">
+    <Card>
       <header className="table__header">
         <h2 className="table__title">Application Performance Breakdown</h2>
         <p className="table__subtitle">

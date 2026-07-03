@@ -99,7 +99,7 @@ const Chart = ({ data, isLoading, startDate, endDate }: ChartProps) => {
   );
 
   return (
-    <Card className="chart">
+    <Card>
       <div className="chart__header">
         {!isLoading && <MeasureToggle value={measure} onChange={setMeasure} />}
       </div>
