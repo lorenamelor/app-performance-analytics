@@ -3,15 +3,37 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  min-height: 200px;
+  text-align: center;
+  gap: 12px;
+  min-height: 280px;
   width: 100%;
+  padding: 48px 24px;
   margin-bottom: 16px;
+}
+
+.errorState__title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
 }
 
 .errorState__message {
   margin: 0;
-  color: #d32f2f;
-  font-size: 14px;
-  text-align: center;
+  max-width: 420px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.errorState__retry {
+  margin-top: 12px;
+  text-transform: none;
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+.errorState__retry:hover {
+  box-shadow: none;
 }

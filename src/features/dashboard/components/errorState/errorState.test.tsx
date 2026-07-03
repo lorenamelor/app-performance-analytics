@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import ErrorState from "./errorState";
 
 describe("ErrorState", () => {
-  it("renders the error message and retry button", () => {
+  it("renders the title, error message and retry button", () => {
     render(
       <ErrorState
         message="Failed to load data. Please try again."
@@ -10,9 +10,10 @@ describe("ErrorState", () => {
       />,
     );
 
-    expect(screen.getByRole("alert")).toHaveTextContent(
-      "Failed to load data. Please try again.",
-    );
+    expect(
+      screen.getByRole("heading", { name: "Oops, something went wrong" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Failed to load data. Please try again.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
   });
 
