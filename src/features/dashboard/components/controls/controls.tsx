@@ -1,7 +1,7 @@
 import DateField from "../../../../components/dateField/dateField";
 import "./controls.css";
 
-const INVALID_RANGE_MESSAGE = "End date must be on or after start date.";
+const INVALID_RANGE_MESSAGE = "End date must be after start date";
 
 type ControlsProps = {
   startDate: string;

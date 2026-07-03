@@ -103,7 +103,7 @@ describe("Dashboard", () => {
     });
 
     expect(
-      screen.getAllByText("End date must be on or after start date."),
+      screen.getAllByText("End date must be after start date"),
     ).toHaveLength(2);
   });
 });

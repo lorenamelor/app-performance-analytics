@@ -37,7 +37,7 @@ describe("Controls", () => {
     render(<Controls {...defaultProps} isInvalidRange />);
 
     expect(
-      screen.getAllByText("End date must be on or after start date."),
+      screen.getAllByText("End date must be after start date"),
     ).toHaveLength(2);
   });
 });
