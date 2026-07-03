@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import Controls from "./components/controls/controls";
 import Chart from "./components/chart/chart";
 import Table from "./components/table/table";
@@ -8,18 +9,27 @@ import useDateRangeFromUrl from "./hooks/useDateRangeFromUrl/useDateRangeFromUrl
 import { filterByDateRange } from "./utils/filterData/filterData";
 import "./dashboard.css";
 
+const DATE_FILTER_DEBOUNCE_MS = 300;
+
 const Dashboard = () => {
   const { data, isLoading, error, refetch } = useData();
   const { startDate, endDate, isInvalidRange, setStartDate, setEndDate } =
     useDateRangeFromUrl();
 
+  const debouncedStartDate = useDebouncedValue(startDate, DATE_FILTER_DEBOUNCE_MS);
+  const debouncedEndDate = useDebouncedValue(endDate, DATE_FILTER_DEBOUNCE_MS);
+
   const filteredData = useMemo(
     () =>
       data.map((app) => ({
         ...app,
-        data: filterByDateRange(app.data, startDate, endDate),
+        data: filterByDateRange(
+          app.data,
+          debouncedStartDate,
+          debouncedEndDate,
+        ),
       })),
-    [data, startDate, endDate],
+    [data, debouncedStartDate, debouncedEndDate],
   );
 
   return (
@@ -45,14 +55,14 @@ const Dashboard = () => {
           <Chart
             data={filteredData}
             isLoading={isLoading}
-            startDate={startDate}
-            endDate={endDate}
+            startDate={debouncedStartDate}
+            endDate={debouncedEndDate}
           />
           <Table
             data={filteredData}
             isLoading={isLoading}
-            startDate={startDate}
-            endDate={endDate}
+            startDate={debouncedStartDate}
+            endDate={debouncedEndDate}
           />
         </>
       )}
