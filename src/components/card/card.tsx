@@ -2,7 +2,6 @@ import "./card.css";
 
 type CardProps = {
   children: React.ReactNode;
-  className?: string;
 };
 
 const Card = ({ children }: CardProps) => {
