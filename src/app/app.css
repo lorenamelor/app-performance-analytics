@@ -1,3 +1,9 @@
+body {
+  background-color: #f5f6f8;
+  font-family: "Source Sans 3", "Source Sans 3 Fallback", "Inter", ui-sans-serif,
+    sans-serif;
+}
+
 .container {
-  margin: 25px;
+  padding: 24px 0;
 }
