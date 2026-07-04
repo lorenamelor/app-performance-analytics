@@ -65,8 +65,8 @@ src/
 **Why:**
 
 - **Colocation** — dashboard components, hooks, business utils, and types live together, making navigation, testing, and feature evolution easier.
-- `**components/` at the root** — generic, domain-agnostic UI (`Card`, `DateField`), reusable by any feature without importing dashboard code.
-- `**utils/` at the root vs `features/.../utils/`** — pure formatting at the root; date-range filtering and metric aggregation in the feature.
+- `**components/` at the root\*\* — generic, domain-agnostic UI (`Card`, `DateField`), reusable by any feature without importing dashboard code.
+- `**utils/` at the root vs `features/.../utils/`\*\* — pure formatting at the root; date-range filtering and metric aggregation in the feature.
 - **Global vs. feature boundary** — the organization makes explicit what is shareable (`components/`, formatting `utils/`, `config/`) and what belongs to the dashboard domain. This brought clarity during implementation and makes it easier to evolve the project without mixing responsibilities.
 
 **What else changed:**
@@ -82,7 +82,7 @@ The original hook called `fetchData()` in the component body, **outside of a `us
 
 **Improvements beyond the brief:**
 
-- Fetch inside `useEffect` with `setTimeout` cleanup.
+- Fetch inside `useEffect` on mount; **minimum 1s loading** on first load (fetch runs in parallel, so data is ready when the spinner ends). Retry (`refetch`) skips the delay.
 - Relative path `/data.json`.
 - `response.ok` check, `error` and `refetch` states with `ErrorState` for UI retry.
 
@@ -127,12 +127,13 @@ The original hook called `fetchData()` in the component body, **outside of a `us
 
 Meets the inefficiencies bonus and includes additional optimizations:
 
-- `**useMemo` in chart and table** — replaces the initial code's `useEffect` + `useState`; avoids recalculating series, rows, and Highcharts options on every re-render.
-- `**useCallback`** in data and date hooks.
+- `**useMemo` in chart and table\*\* — replaces the initial code's `useEffect` + `useState`; avoids recalculating series, rows, and Highcharts options on every re-render.
+- `**useCallback`\*\* in data and date hooks.
 - **Extracted logic** — filter and aggregation as pure functions outside components.
 - **Debounce on date filter** — `useDebouncedValue` delays filtering by 300ms, reducing chart and table recalculations while the user adjusts the range.
 - **Chart** — markers disabled; memoized series derivation.
 - **Images** — `loading="lazy"` on app icons.
+- **Fonts** — Source Sans 3 via `rel="preload" as="style"` (non-blocking); inline critical CSS uses system sans-serif for immediate first paint.
 
 ### Accessibility
 
@@ -178,10 +179,10 @@ The dashboard explicitly communicates what is happening with the data at each st
 - **Load error** — if fetch fails (network, non-ok HTTP), chart and table are replaced by an `ErrorState` with a clear message and "Try again" button for refetch, instead of only logging to the console.
 - **Loading** — the chart shows a centered spinner (`role="status"`) while data loads; the table uses DataGrid native loading (progress bar over the grid).
 - **No data in range** — the chart distinguishes two scenarios via Highcharts' `no-data-to-display` module:
-  - *"No data available"* — no apps returned by the API;
-  - *"No data for the selected date range"* — apps exist, but no points fall within the filtered range.
-- **Empty table** — when there are no apps (`data` empty), the DataGrid shows *"No data available"* via `noRowsLabel`, keeping headers visible. With apps in the dataset but no points in the range, the table still lists apps with zero totals and RPD as `"-"`.
-- **Date validation** — invalid range (start after end) shows *"End date must be after start date"* on both fields via MUI `helperText`, without blocking typing.
+  - _"No data available"_ — no apps returned by the API;
+  - _"No data for the selected date range"_ — apps exist, but no points fall within the filtered range.
+- **Empty table** — when there are no apps (`data` empty), the DataGrid shows _"No data available"_ via `noRowsLabel`, keeping headers visible. With apps in the dataset but no points in the range, the table still lists apps with zero totals and RPD as `"-"`.
+- **Date validation** — invalid range (start after end) shows _"End date must be after start date"_ on both fields via MUI `helperText`, without blocking typing.
 
 **Why:** each state (error, loading, empty, range with no points, invalid filter) has its own message — the user understands whether to retry, wait, adjust dates, or simply that there are no metrics for that period.
 
@@ -196,11 +197,7 @@ The intent was to improve presentation and information clarity while keeping the
 
 ### Date selection input
 
-`DateField` usability can still improve: it is not clear which part of the control opens the calendar (text field, icon, or clickable area). Worth revisiting the component — for example, with an explicit calendar button, larger click area, or a more guided date picker — to make the interaction obvious without trial and error.
-
-### Web Vitals
-
-`web-vitals` is already listed as a dependency but is not wired up in the app entry point. Connecting it (e.g. via `reportWebVitals` in `index.tsx`) would measure LCP, FID, and CLS in production — useful for validating performance changes such as lazy-loading Highcharts or adjusting debounce behavior on the live demo.
+`DateField` usability can still improve: it is not clear which part of the control opens the calendar (text field, icon, or clickable area). Worth revisiting the component — for example, with an explicit calendar button, larger click area, or a more guided date picker — to make the interaction obvious without trial and error.đ
 
 ### React Query (TanStack Query)
 
@@ -307,4 +304,3 @@ Here are the tasks you should complete:
   - Highcharts - [https://api.highcharts.com/highcharts/](https://api.highcharts.com/highcharts/)
   - Data Grid - [https://mui.com/x/react-data-grid/](https://mui.com/x/react-data-grid/)
   - Dayjs - [https://day.js.org/en/](https://day.js.org/en/)
-

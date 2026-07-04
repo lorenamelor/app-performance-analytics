@@ -9,8 +9,8 @@
 
 body {
   background-color: var(--color-bg);
-  font-family: "Source Sans 3", "Source Sans 3 Fallback", "Inter", ui-sans-serif,
-    sans-serif;
+  font-family: "Source Sans 3", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .container {

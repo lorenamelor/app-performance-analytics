@@ -3,7 +3,7 @@ import type { AppData } from "../../types";
 
 export const FETCH_ERROR_MESSAGE = "Failed to load data. Please try again.";
 
-const LOAD_DELAY_MS = 2000;
+const LOAD_DELAY_MS = 1000;
 
 async function fetchDashboardData(): Promise<AppData[]> {
   const response = await fetch("/data.json");
