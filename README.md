@@ -95,10 +95,9 @@ The original hook called `fetchData()` in the component body, **outside of a `us
 - Range synced with `?start=...&end=...` in the URL via `history.replaceState`, with `popstate` support.
 - Validation when the end date is before the start date, with field feedback.
 - `DateField` with MUI `TextField` and error messages, instead of native `<input>`.
-- Day.js with UTC plugin centralized in `config/dayjs.ts`.
 - 300ms debounce on chart and table filtering via `useDebouncedValue` — inputs and the URL respond immediately; heavy recalculation (Highcharts + DataGrid) only runs after the user stops adjusting dates.
 
-**Why:** URL persistence allows reload and link sharing; UTC ensures consistent comparisons regardless of browser timezone; debounce avoids re-rendering heavy libraries on every intermediate range change.
+**Why:** URL persistence allows reload and link sharing; debounce avoids re-rendering heavy libraries on every intermediate range change.
 
 ### Chart
 
@@ -140,7 +139,7 @@ Meets the inefficiencies bonus and includes additional optimizations:
 Quality layer not required by the brief:
 
 - **Landmark and structure** — `<main>`; heading hierarchy (`h1`, `h2`).
-- **Forms** — labels associated via MUI `TextField`; errors linked to input (`helperText`).
+- **Forms** — errors linked to input (`helperText`).
 - **Dynamic states** — chart loading with `role="status"`; error with `role="alert"`; semantic empty states.
 - **Interactive controls** — toggle with `aria-label` and `aria-pressed`.
 - **Decorative content** — icons with `aria-hidden` and `alt=""`.
@@ -199,42 +198,29 @@ The intent was to improve presentation and information clarity while keeping the
 
 `DateField` usability can still improve: it is not clear which part of the control opens the calendar (text field, icon, or clickable area). Worth revisiting the component — for example, with an explicit calendar button, larger click area, or a more guided date picker — to make the interaction obvious without trial and error.
 
-### Code splitting
+### Web Vitals
 
-Highcharts and MUI Data Grid are heavy libraries; `React.lazy` + `Suspense` for chart/table would reduce initial JS (useful if this becomes a multi-page app).
+`web-vitals` is already listed as a dependency but is not wired up in the app entry point. Connecting it (e.g. via `reportWebVitals` in `index.tsx`) would measure LCP, FID, and CLS in production — useful for validating performance changes such as lazy-loading Highcharts or adjusting debounce behavior on the live demo.
 
 ### React Query (TanStack Query)
 
-Useful with multiple endpoints or dynamic data: cache, deduplication, standardized states, and retry. For a single static JSON, the current hook is sufficient.
-
-### Tailwind CSS
-
-At larger scale, utilities or centralized tokens would reduce fragmentation — with the cost of migration and coexistence with MUI and Highcharts.
-
-### Other
-
-- Announce table loading for screen readers; review keyboard on toggle
-- Fetch URL via `REACT_APP_API_URL`
-- Sync `measure` in the URL if it one day affects other charts on the screen
-- React Router;
-- i18n;
-- table pagination
+If the app scales to multiple API requests, pages, or background refetch, TanStack Query would standardize cache, deduplication, loading vs. fetching states, and retry. For the current scope — a single static `data.json` — the existing `useData` hook is sufficient.
 
 ---
 
 ## Deploy (Vercel)
 
-A aplicação está publicada na [Vercel](https://vercel.com/) — plataforma de hospedagem pensada para front-end e apps estáticos/SSR. Ela conecta ao repositório Git, roda o build (`npm run build`) e serve os arquivos gerados em uma URL pública, com HTTPS e CDN incluídos.
+The application is published on [Vercel](https://vercel.com/) — a hosting platform designed for front-end and static/SSR apps. It connects to the Git repository, runs the build (`npm run build`), and serves the generated files at a public URL, with HTTPS and CDN included.
 
-O projeto está ligado a este repo: **cada push na branch `main` dispara um deploy automático** para [https://fe-assignment-react-snowy.vercel.app/](https://fe-assignment-react-snowy.vercel.app/). Não é preciso publicar manualmente — merge na `main` e a versão mais recente fica disponível em alguns minutos.
+The project is linked to this repo: **each push to the `main` branch triggers an automatic deploy** to [https://fe-assignment-react-snowy.vercel.app/](https://fe-assignment-react-snowy.vercel.app/). No manual publishing is required — merge to `main` and the latest version is available within a few minutes.
 
-Para rodar localmente, use o [Quick Start](#quick-start) acima.
+To run locally, use the [Quick Start](#quick-start) above.
 
 ---
 
-## Original assignment brief (Sensor Tower)
+## Original assignment brief
 
-Texto original recebido com o projeto. Descreve o escopo pedido, os requisitos por seção e os itens de bônus.
+Original text provided with the project. Describes the requested scope, requirements per section, and bonus items.
 
 Thank you for your interest in Sensor Tower! We appreciate your time and effort in completing this take-home assignment. We understand that your time is valuable, and we estimate that this assignment should not take more than 3-4 hours to complete. We look forward to reviewing your work and getting to know you better. If you have any questions or need further clarification, please don't hesitate to reach out. Good luck!
 
